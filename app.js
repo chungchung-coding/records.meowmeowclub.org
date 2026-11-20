@@ -411,7 +411,10 @@ async function drawReceipt(canvas, r, isStale, skipPhoto) {
     c.fillStyle = INK; c.font = "500 23px " + BODY; c.fillText("The adopter agreed to the adoption terms.", M + 40, ny + 12);
   }
 
-  c.textAlign = "center"; c.fillStyle = INK; fit(c, "Thank you for giving a cat a home.", s => "800 " + s + "px " + DISP, 42, 28, W - 2 * M); c.fillText("Thank you for giving a cat a home.", W / 2, 1376);
+  c.textAlign = "center"; c.fillStyle = INK;
+  const thanks = ["Thank you for loving a cat", "who was waiting to be chosen"];
+  fit(c, thanks[1], s => "800 " + s + "px " + DISP, 44, 28, W - 2 * M);
+  thanks.forEach((l, i) => c.fillText(l, W / 2, 1326 + i * 52));
 
   if (r.sample) {
     c.save(); c.translate(W / 2, H / 2); c.rotate(-0.5); c.globalAlpha = 0.12; c.fillStyle = INK; c.font = "800 220px " + DISP; c.textAlign = "center"; c.fillText("SAMPLE", 0, 70); c.restore();
