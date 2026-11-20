@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Meow Meow Club Records</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top-band">
+  <div class="in">
+    <img class="logo" src="assets/logo.jpg" alt="Meow Meow Club logo" width="56" height="56">
+    <div class="brand">
+      <h1>Meow Meow Club</h1>
+      <p>Adoption records</p>
+    </div>
+    <div class="who" id="who" hidden>
+      <span id="whoName"></span>
+      <button type="button" class="btn btn-sm" id="signOutBtn">Sign out</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <p class="loading" id="v-loading">Loading...</p>
+
+  <!-- Sign in -->
+  <section id="v-login" class="narrow" hidden>
+    <h2>Volunteer sign in</h2>
+    <p class="lead">Use the email address and password the club admin set up for you.</p>
+    <form id="loginForm" novalidate>
+      <div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" autocomplete="username" inputmode="email"></div>
+      <div class="field"><label for="loginPass">Password</label><input id="loginPass" type="password" autocomplete="current-password"></div>
+      <p class="err" id="loginErr" role="alert" hidden></p>
+      <p class="okmsg" id="loginOk" role="status" hidden></p>
+      <div class="row">
+        <button type="submit" class="btn btn-ink" id="loginBtn">Sign in</button>
+        <button type="button" class="btn btn-quiet" id="forgotBtn">Forgot password</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Set a new password (after a reset link) -->
+  <section id="v-recover" class="narrow" hidden>
+    <h2>Choose a new password</h2>
+    <p class="lead">Use at least 10 characters.</p>
+    <form id="recoverForm" novalidate>
+      <div class="field"><label for="newPass">New password</label><input id="newPass" type="password" autocomplete="new-password"></div>
+      <div class="field"><label for="newPass2">Repeat new password</label><input id="newPass2" type="password" autocomplete="new-password"></div>
+      <p class="err" id="recoverErr" role="alert" hidden></p>
+      <button type="submit" class="btn btn-ink">Save password</button>
+    </form>
+  </section>
+
+  <!-- Signed in but not on the staff list -->
+  <section id="v-noaccess" class="narrow" hidden>
+    <h2>No access yet</h2>
+    <p class="lead">You are signed in, but the club admin has not given this account access to the records. Ask the admin to add you, then sign in again.</p>
+    <button type="button" class="btn" id="noaccessOut">Sign out</button>
+  </section>
+
+  <!-- Records -->
+  <section id="v-records" hidden>
+    <div class="head">
+      <h2>Adoptions</h2>
+      <div class="row">
+        <button type="button" class="btn" id="exportCsv" hidden>Export CSV</button>
+        <button type="button" class="btn btn-ink" id="newBtn">New adoption</button>
+      </div>
+    </div>
+    <p class="note" id="conn" role="status" hidden></p>
+    <div id="recordsBody"></div>
+  </section>
+
+  <!-- Form -->
+  <section id="v-form" hidden>
+    <button type="button" class="btn btn-quiet" id="formBack">&larr; All adoptions</button>
+    <h2 id="formTitle" class="formtitle">New adoption</h2>
+    <form id="form" novalidate>
+      <fieldset>
+        <legend>The cat</legend>
+        <div class="grid2">
+          <div class="field span2">
+            <span class="lbl" id="photoLbl">Cat photo</span>
+            <label class="drop" for="photo">
+              <span id="photoBox" class="thumb"></span>
+              <span><strong id="photoTxt">Add a photo</strong><span class="hint">Take one or choose from your library. It prints on the receipt.</span></span>
+            </label>
+            <input class="vh" type="file" id="photo" accept="image/*" aria-labelledby="photoLbl">
+            <small class="err" id="err-photo" hidden></small>
+          </div>
+          <div class="field">
+            <label for="catName">Cat name</label>
+            <input id="catName" type="text" autocomplete="off" maxlength="60" aria-describedby="err-catName">
+            <small class="err" id="err-catName" hidden></small>
+          </div>
+          <div class="field">
+            <label for="sex">Sex</label>
+            <select id="sex"><option value="">Not recorded</option><option>Female</option><option>Male</option></select>
+          </div>
+          <div class="field">
+            <label for="age">Age</label>
+            <input id="age" type="text" maxlength="40" placeholder="e.g. 2 years, 8 months">
+          </div>
+          <div class="field">
+            <label for="colour">Colour or breed</label>
+            <input id="colour" type="text" maxlength="60" placeholder="e.g. Orange tabby">
+          </div>
+          <div class="field">
+            <label for="sterilised">Sterilised</label>
+            <select id="sterilised"><option value="">Not recorded</option><option>Yes</option><option>No</option><option>Booked</option></select>
+          </div>
+          <div class="field">
+            <label for="vaccinated">Vaccinated</label>
+            <select id="vaccinated"><option value="">Not recorded</option><option>Yes</option><option>No</option><option>Partly</option></select>
+          </div>
+          <div class="field span2">
+            <label for="microchip">Microchip number (optional)</label>
+            <input id="microchip" type="text" inputmode="numeric" maxlength="30" autocomplete="off">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>The adoption</legend>
+        <div class="grid2">
+          <div class="field">
+            <label for="adoptionDate">Date of adoption</label>
+            <input id="adoptionDate" type="date" aria-describedby="err-adoptionDate">
+            <small class="err" id="err-adoptionDate" hidden></small>
+          </div>
+          <div class="field">
+            <label for="method">Payment method</label>
+            <select id="method"><option>Cash</option><option>PayNow</option><option>Bank transfer</option><option>Card</option><option>Waived</option></select>
+          </div>
+          <div class="field span2">
+            <label for="fee">Adoption fee</label>
+            <div class="pair">
+              <select id="currency" aria-label="Currency"><option>SGD</option><option>MYR</option><option>USD</option><option>HKD</option><option>GBP</option><option>EUR</option><option>AUD</option></select>
+              <input id="fee" type="text" inputmode="decimal" placeholder="0.00" aria-describedby="err-fee">
+            </div>
+            <small class="err" id="err-fee" hidden></small>
+          </div>
+          <div class="field span2">
+            <label for="handledBy">Handled by (volunteer name)</label>
+            <input id="handledBy" type="text" maxlength="60" autocomplete="off">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>The adopter</legend>
+        <div class="grid2">
+          <div class="field span2">
+            <label for="adopterName">Adopter name</label>
+            <input id="adopterName" type="text" autocomplete="off" maxlength="80" aria-describedby="err-adopterName">
+            <small class="err" id="err-adopterName" hidden></small>
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" type="tel" autocomplete="off" maxlength="30" aria-describedby="err-phone">
+            <small class="err" id="err-phone" hidden></small>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" autocomplete="off" maxlength="100" aria-describedby="err-email">
+            <small class="err" id="err-email" hidden></small>
+          </div>
+          <div class="field span2">
+            <label for="address">Address (optional)</label>
+            <textarea id="address" rows="2" maxlength="200"></textarea>
+          </div>
+          <div class="field span2">
+            <label for="notes">Notes (optional)</label>
+            <textarea id="notes" rows="2" maxlength="240" placeholder="Anything to print on the receipt, such as follow-up visits"></textarea>
+          </div>
+          <label class="check span2"><input type="checkbox" id="terms"><span>The adopter has read and agreed to the adoption terms.</span></label>
+          <div class="span2">
+            <label class="check"><input type="checkbox" id="pdpa" aria-describedby="err-pdpa"><span>The adopter has been told how Meow Meow Club will collect, use and keep their personal data, and consents to this. <a id="privacyLink" href="#" target="_blank" rel="noopener" hidden>Privacy notice</a></span></label>
+            <small class="err" id="err-pdpa" hidden></small>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="formbar">
+        <button type="submit" class="btn btn-ink" id="saveBtn">Save and create receipt</button>
+        <button type="button" class="btn" id="cancelBtn">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Detail / receipt -->
+  <section id="v-detail" hidden>
+    <button type="button" class="btn btn-quiet" id="detailBack">&larr; All adoptions</button>
+    <h2 id="dName" class="formtitle"></h2>
+    <p class="meta" id="dMeta"></p>
+    <p class="meta" id="dAudit"></p>
+    <div class="receipt-wrap"><canvas id="receipt" role="img" aria-label="Adoption receipt"></canvas></div>
+    <div class="row">
+      <button type="button" class="btn btn-ink" id="savePdf">Save receipt as PDF</button>
+      <button type="button" class="btn" id="shareBtn" hidden>Share receipt</button>
+      <button type="button" class="btn" id="savePng">Save as image</button>
+      <button type="button" class="btn" id="editBtn">Edit</button>
+      <button type="button" class="btn btn-danger" id="delBtn" hidden>Delete</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">Meow Meow Club Ltd &middot; UEN 202622627H &middot; meowmeowclub.org</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" hidden>
+  <div class="sheet">
+    <h3 id="mTitle"></h3>
+    <p id="mBody"></p>
+    <div class="row">
+      <button type="button" class="btn" id="mCancel">Keep it</button>
+      <button type="button" class="btn btn-danger" id="mOk">Delete record</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
