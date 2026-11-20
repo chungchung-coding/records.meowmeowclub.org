@@ -396,7 +396,7 @@ async function drawReceipt(canvas, r, isStale, skipPhoto) {
   c.fillStyle = INK; c.font = "500 27px " + BODY; c.textAlign = "left";
   c.fillText(r.method === "Waived" ? "Fee waived" : "Paid by " + (r.method || "cash"), M + 32, FY + 104);
   c.textAlign = "right"; c.fillStyle = INK;
-  const amt = feeText(r); fit(c, amt, s => "700 " + s + "px " + BODY, 58, 30, 470); c.fillText(amt, W - M - 32, FY + 106);
+  const amt = feeText(r); fit(c, amt, s => "700 " + s + "px " + BODY, 44, 26, 470); c.fillText(amt, W - M - 32, FY + 106);
 
   // notes and terms
   c.textAlign = "left"; let ny = 1166;
@@ -411,7 +411,7 @@ async function drawReceipt(canvas, r, isStale, skipPhoto) {
     c.fillStyle = INK; c.font = "500 23px " + BODY; c.fillText("The adopter agreed to the adoption terms.", M + 40, ny + 12);
   }
 
-  c.textAlign = "center"; c.fillStyle = INK; c.font = "800 30px " + DISP; c.fillText("Thank you for giving a cat a home.", W / 2, 1394);
+  c.textAlign = "center"; c.fillStyle = INK; fit(c, "Thank you for giving a cat a home.", s => "800 " + s + "px " + DISP, 42, 28, W - 2 * M); c.fillText("Thank you for giving a cat a home.", W / 2, 1376);
 
   if (r.sample) {
     c.save(); c.translate(W / 2, H / 2); c.rotate(-0.5); c.globalAlpha = 0.12; c.fillStyle = INK; c.font = "800 220px " + DISP; c.textAlign = "center"; c.fillText("SAMPLE", 0, 70); c.restore();
