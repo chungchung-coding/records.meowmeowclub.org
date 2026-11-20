@@ -411,12 +411,6 @@ async function drawReceipt(canvas, r, isStale, skipPhoto) {
     c.fillStyle = INK; c.font = "500 23px " + BODY; c.fillText("The adopter agreed to the adoption terms.", M + 40, ny + 12);
   }
 
-  // signatures and footer
-  const SY = 1322;
-  c.fillStyle = INK; c.fillRect(M, SY, 380, 2); c.fillRect(W - M - 380, SY, 380, 2);
-  c.fillStyle = MUTED; c.font = "500 20px " + BODY; c.textAlign = "left";
-  c.fillText("Received by" + (r.handledBy ? ": " + r.handledBy : ""), M, SY + 30);
-  c.fillText("Adopter signature", W - M - 380, SY + 30);
   c.textAlign = "center"; c.fillStyle = INK; c.font = "800 30px " + DISP; c.fillText("Thank you for giving a cat a home.", W / 2, 1394);
 
   if (r.sample) {
